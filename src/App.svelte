@@ -1,39 +1,65 @@
 <script lang="ts">
-  import Greet from './lib/Greet.svelte'
+    import {Board} from "./board";
+    import Field from "./Field.svelte";
+
+    let board = new Board();
+    board.setup();
 </script>
 
-<main class="container">
-  <h1>Welcome to Tauri edited!</h1>
+<style lang="css">
+    :root {
+        --max-width: 40vw;
+        --max-height: 75vh;
+        --min-size: min(var(--max-height), var(--max-width));
+    }
 
-  <div class="row">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
-    </a>
-    <a href="https://tauri.app" target="_blank">
-      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank">
-      <img src="/svelte.svg" class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
+    * {
+        font-family: Arial, sans-serif;
+    }
 
-  <p>
-    Click on the Tauri, Vite, and Svelte logos to learn more.
-  </p>
+    h1 {
+        text-align: center;
+    }
 
-  <div class="row">
-    <Greet />
-  </div>
+    #board {
+        display: grid;
 
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
 
-</main>
+        width: var(--min-size);
+        height: var(--min-size);
 
-<style>
-  .logo.vite:hover {
-    filter: drop-shadow(0 0 2em #747bff);
-  }
+        margin: 10px auto;
+    }
 
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00);
-  }
+    .testImg {
+        width: 50px;
+        height: 50px;
+    }
+    .testContainer {
+        width: 50px;
+        height: 50px;
+
+        background-color: yellow;
+    }
+
+    .drag {
+        padding:20px;
+        margin: 10px;
+        cursor:grab;
+        background: #efe;
+    }
 </style>
+
+<main>
+    <h1>Chess GUI</h1>
+
+    <div id="board">
+        {#each board.board as row, y}
+            {#each row as element, x}
+                <Field items={element} x="{x}" y="{y}"></Field>
+            {/each}
+        {/each}
+    </div>
+</main>
