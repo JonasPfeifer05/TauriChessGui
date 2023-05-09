@@ -11,7 +11,7 @@ export class Figure {
     static blackQueen(): Figure {return new Figure(""+Math.random(), "/black_queen.png")}
     static whiteKing(): Figure {return new Figure(""+Math.random(), "/white_king.png")}
     static blackKing(): Figure {return new Figure(""+Math.random(), "/black_king.png")}
-    static empty(): Figure {return new Figure("", "/empty.png")}
+    static empty(): Figure {return new Figure("-1", "/empty.png")}
 
     id: string;
     img: string;

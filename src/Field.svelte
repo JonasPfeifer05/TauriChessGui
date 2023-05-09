@@ -1,6 +1,5 @@
 <script lang="ts">
     import {Figure} from "./figureTypes";
-    import {scale, slide} from "svelte/transition";
     import {getContext} from "svelte";
 
     export let item: Figure = Figure.empty();
@@ -37,7 +36,9 @@
 
         width: 100%;
         height: 100%;
+    }
 
+    .grab {
         cursor: grab;
     }
 
@@ -62,14 +63,17 @@
      class:selectedDark={!light && selectVal}
 >
     <div class="content"
-         draggable="true"
+         draggable={item.id !== "-1"}
+         class:grab={item.id !== "-1"}
          on:drop={(e) => {drop(y,x)}}
          on:dragover={(ev) => {ev.preventDefault()}}
          on:dragstart={() => {drag(y,x)}}
          on:mousedown={() => {select(y,x)}}
-        on:mouseenter={() => {select(y,x)}}
-        on:mouseleave={() => {emptySelected()}}
+         on:mouseenter={() => {select(y,x)}}
+         on:mouseleave={() => {emptySelected()}}
     >
-        <img src="{item.img}">
+        {#if item.id !== "-1"}
+            <img src="{item.img}">
+        {/if}
     </div>
 </div>
