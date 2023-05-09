@@ -10,7 +10,30 @@
     let draggedPos: [number, number] = [0,0];
     let droppedPos: [number, number] = [0,0];
 
-    setContext("dragging", { drag, drop })
+    setContext("dragging", { drag, drop, select })
+
+    let selected: boolean[][];
+    emptySelected();
+
+    function emptySelected() {
+        let tmp = [];
+        for (let i = 0; i < 8; i++) {
+            let tmp2 = [];
+            for (let j = 0; j < 8; j++) {
+                tmp2.push("");
+            }
+            tmp.push(tmp2)
+        }
+        selected = tmp;
+    }
+
+    function select(y:number, x:number) {
+        selected[0][0] = true;
+        selected[1][0] = true;
+        selected[2][0] = true;
+        selected[3][0] = true;
+        selected[4][0] = true;
+    }
 
     function drag(y:number, x:number) {
         draggedPos = [y,x]
@@ -18,7 +41,12 @@
     }
 
     function drop(y:number,x:number) {
+        emptySelected();
+        if (draggedPos[0] === y && draggedPos[1] === x) return;
+
         droppedPos = [y,x]
+
+        console.log("a")
 
         let figure = board.board[draggedPos[0]][draggedPos[1]];
         board.board[draggedPos[0]][draggedPos[1]] = Figure.empty();
@@ -53,24 +81,6 @@
 
         margin: 10px auto;
     }
-
-    .testImg {
-        width: 50px;
-        height: 50px;
-    }
-    .testContainer {
-        width: 50px;
-        height: 50px;
-
-        background-color: yellow;
-    }
-
-    .drag {
-        padding:20px;
-        margin: 10px;
-        cursor:grab;
-        background: #efe;
-    }
 </style>
 
 <main>
@@ -79,7 +89,7 @@
     <div id="board">
         {#each board.board as row, y}
             {#each row as element, x}
-                <Field item={element} x="{x}" y="{y}"></Field>
+                <Field item={element} x="{x}" y="{y}" selectVal="{selected[y][x]}"></Field>
             {/each}
         {/each}
     </div>

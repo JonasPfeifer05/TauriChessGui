@@ -6,10 +6,11 @@
     export let item: Figure = Figure.empty();
     export let x = 0;
     export let y = 0;
+    export let selectVal = "";
 
     let light = !(y % 2 === 0 ^ x % 2 === 0);
 
-    const { drag, drop } = getContext("dragging")
+    const {drag, drop, select} = getContext("dragging")
 </script>
 
 <style>
@@ -17,8 +18,8 @@
         --dark-color: black;
         --light-color: white;
 
-        --dark-highlight-color: red;
-        --light-highlight-color: blue;
+        --dark-highlight-color: #008000;
+        --light-highlight-color: #80FF80;
     }
 
     .light {
@@ -27,10 +28,6 @@
 
     .dark {
         background-color: var(--dark-color);
-    }
-
-    .outerContent {
-
     }
 
     .content {
@@ -48,14 +45,29 @@
         width: 90%;
         height: 90%;
     }
+
+    .selectedLight {
+        background-color: var(--light-highlight-color);
+    }
+
+    .selectedDark {
+        background-color: var(--dark-highlight-color);
+    }
 </style>
 
-<div class="outerContent" class:light={light} class:dark={!light}>
+<div class="outerContent"
+     class:light={light}
+     class:dark={!light}
+     class:selectedLight={light && selectVal}
+     class:selectedDark={!light && selectVal}
+>
     <div class="content"
          draggable="true"
          on:drop={(e) => {drop(y,x)}}
          on:dragover={(ev) => {ev.preventDefault()}}
-         on:dragstart={() => {drag(y,x)}}>
+         on:dragstart={() => {drag(y,x)}}
+         on:mousedown={() => {console.log("c");select(y,x)}}
+    >
         <img src="{item.img}">
     </div>
 </div>
