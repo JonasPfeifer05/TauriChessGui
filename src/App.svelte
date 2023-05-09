@@ -13,6 +13,7 @@
     setContext("dragging", { drag, drop, select, emptySelected })
 
     let selected: boolean[][];
+    let selectedPositions: [number,number][] = []
     emptySelected();
 
     function emptySelected() {
@@ -25,14 +26,20 @@
             tmp.push(tmp2)
         }
         selected = tmp;
+        selectedPositions = [];
     }
 
     function select(y:number, x:number) {
         selected[0][0] = true;
+        selectedPositions.push([0,0]);
         selected[1][0] = true;
+        selectedPositions.push([1,0]);
         selected[2][0] = true;
+        selectedPositions.push([2,0]);
         selected[3][0] = true;
+        selectedPositions.push([3,0]);
         selected[4][0] = true;
+        selectedPositions.push([4,0]);
     }
 
     function drag(y:number, x:number) {
@@ -40,7 +47,15 @@
     }
 
     function drop(y:number,x:number) {
+        let selected = false;
+        for (let selectedPosition of selectedPositions) {
+            if (selectedPosition[0] === y && selectedPosition[1] === x) {
+                selected = true;
+                break;
+            }
+        }
         emptySelected();
+        if (!selected) return;
         if (draggedPos[0] === y && draggedPos[1] === x) return;
 
         droppedPos = [y,x]
