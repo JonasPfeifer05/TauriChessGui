@@ -1,9 +1,30 @@
 <script lang="ts">
     import {Board} from "./board";
     import Field from "./Field.svelte";
+    import {Figure} from "./figureTypes";
+    import {setContext} from "svelte";
 
     let board = new Board();
     board.setup();
+
+    let draggedPos: [number, number] = [0,0];
+    let droppedPos: [number, number] = [0,0];
+
+    setContext("dragging", { drag, drop })
+
+    function drag(y:number, x:number) {
+        draggedPos = [y,x]
+        console.log(draggedPos)
+    }
+
+    function drop(y:number,x:number) {
+        droppedPos = [y,x]
+
+        let figure = board.board[draggedPos[0]][draggedPos[1]];
+        board.board[draggedPos[0]][draggedPos[1]] = Figure.empty();
+
+        board.board[droppedPos[0]][droppedPos[1]] = figure;
+    }
 </script>
 
 <style lang="css">
@@ -58,7 +79,7 @@
     <div id="board">
         {#each board.board as row, y}
             {#each row as element, x}
-                <Field items={element} x="{x}" y="{y}"></Field>
+                <Field item={element} x="{x}" y="{y}"></Field>
             {/each}
         {/each}
     </div>

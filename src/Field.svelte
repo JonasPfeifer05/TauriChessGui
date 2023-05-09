@@ -1,19 +1,15 @@
 <script lang="ts">
-    import {dndzone} from "svelte-dnd-action";
-    import {flip} from "svelte/animate";
     import {Figure} from "./figureTypes";
+    import {scale, slide} from "svelte/transition";
+    import {getContext} from "svelte";
 
-    export let items: Figure[] = [];
+    export let item: Figure = Figure.empty();
     export let x = 0;
     export let y = 0;
 
     let light = !(y % 2 === 0 ^ x % 2 === 0);
 
-    const flipDurationMs = 50;
-
-    function handleDnd(e) {
-        items = e.detail.items;
-    }
+    const { drag, drop } = getContext("dragging")
 </script>
 
 <style>
@@ -33,10 +29,19 @@
         background-color: var(--dark-color);
     }
 
-    div {
+    .outerContent {
+
+    }
+
+    .content {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        width: 100%;
+        height: 100%;
+
+        cursor: grab;
     }
 
     img {
@@ -45,11 +50,12 @@
     }
 </style>
 
-<div class:light={light} class:dark={!light} use:dndzone={{items, flipDurationMs, dropTargetStyle: ""}}
-     on:consider={handleDnd} on:finalize={handleDnd}>
-    {#each items as item (item.id)}
-        <div animate:flip>
-            <img src="{item.img}" alt="">
-        </div>
-    {/each}
+<div class="outerContent" class:light={light} class:dark={!light}>
+    <div class="content"
+         draggable="true"
+         on:drop={(e) => {drop(y,x)}}
+         on:dragover={(ev) => {ev.preventDefault()}}
+         on:dragstart={() => {drag(y,x)}}>
+        <img src="{item.img}">
+    </div>
 </div>
