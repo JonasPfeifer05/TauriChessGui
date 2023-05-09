@@ -10,7 +10,7 @@
 
     let light = !(y % 2 === 0 ^ x % 2 === 0);
 
-    const {drag, drop, select} = getContext("dragging")
+    const {drag, drop, select, emptySelected} = getContext("dragging")
 </script>
 
 <style>
@@ -66,7 +66,9 @@
          on:drop={(e) => {drop(y,x)}}
          on:dragover={(ev) => {ev.preventDefault()}}
          on:dragstart={() => {drag(y,x)}}
-         on:mousedown={() => {console.log("c");select(y,x)}}
+         on:mousedown={() => {select(y,x)}}
+        on:mouseenter={() => {select(y,x)}}
+        on:mouseleave={() => {emptySelected()}}
     >
         <img src="{item.img}">
     </div>

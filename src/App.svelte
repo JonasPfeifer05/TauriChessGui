@@ -10,7 +10,7 @@
     let draggedPos: [number, number] = [0,0];
     let droppedPos: [number, number] = [0,0];
 
-    setContext("dragging", { drag, drop, select })
+    setContext("dragging", { drag, drop, select, emptySelected })
 
     let selected: boolean[][];
     emptySelected();
@@ -37,7 +37,6 @@
 
     function drag(y:number, x:number) {
         draggedPos = [y,x]
-        console.log(draggedPos)
     }
 
     function drop(y:number,x:number) {
@@ -45,8 +44,6 @@
         if (draggedPos[0] === y && draggedPos[1] === x) return;
 
         droppedPos = [y,x]
-
-        console.log("a")
 
         let figure = board.board[draggedPos[0]][draggedPos[1]];
         board.board[draggedPos[0]][draggedPos[1]] = Figure.empty();
